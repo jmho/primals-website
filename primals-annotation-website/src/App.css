@@ -1,38 +1,112 @@
-.App {
-  text-align: center;
+.text-box {
+  width: calc(100% - 80px); /* Adjust the width as needed */
+  margin: 10px;
+  padding: 10px;
+  resize: vertical; /* Allow vertical resizing */
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* Define UF's orange and blue colors */
+:root {
+  --uf-orange: #FF4F00;
+  --uf-blue: #0021A5;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+/* Apply UF's blue color to a specific section */
+.blue-section {
+  background-color: var(--uf-blue);
+  color: white; /* Text color on blue background */
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.instructions {
+  color: var(--uf-orange);
+}
+
+/* Add more styles as needed */
+
+.toplevel {
+  display: flex; 
+	justify-content: center; 
+	align-items: center;
+}
+
+.instructions {
+  display: flex; 
+	justify-content: center; 
+	align-items: center;
+  /* margin-top: -5px; */
+}
+
+.additional-options-container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  margin-top: 20px;
 }
 
-.App-link {
-  color: #61dafb;
+.tree {
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.folder {
+  margin-top: 20px;
+}
+
+
+/* Additional CSS for styling as needed */
+
+.footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px; /* Add space */
+  margin-bottom: 10px;
+}
+
+.footer-button {
+  margin: 0 50px; /* Add space between buttons */
+}
+
+.disabled-text {
+  color: #888; /* Use gray color for disabled text */
+}
+
+.container {
+  display: flex;
+  justify-content: flex-end; /* Align container to the right */
+}
+
+.navbar {
+  position: fixed;
+  top: 140px; /* Adjust as needed */
+  right: 10px; /* Adjust as needed */
+  height: 325px; /* Adjust as needed */
+  width: 120px;
+  background-color: #f0f0f0; /* Background color of the navbar */
+  border: 1px solid #ddd; /* Border around the navbar */
+  padding: 10px; /* Padding inside the navbar */
+  overflow-y: auto;
+}
+
+.content {
+  flex: 1;
+  padding: 10px; /* Add padding to separate content from navbar */
+}
+
+/* .navbar ul {
+  list-style-type: none; 
+  padding: 0;
+}
+
+.navbar li {
+  margin-bottom: 10px; 
+} */
+
+/* .navbar a {
+  text-decoration: none; /* Remove underline from links */
+  /* color: #333; Link color */
+  /* display: block; Make links block-level for full width */
+/* } */ 
+
+.navbar a:hover {
+  background-color: #ddd; /* Background color on hover */
 }
