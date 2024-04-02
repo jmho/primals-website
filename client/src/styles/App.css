@@ -7,8 +7,8 @@
 
 /* Define UF's orange and blue colors */
 :root {
-  --uf-orange: #FF4F00;
-  --uf-blue: #0021A5;
+  --uf-orange: #ff4f00;
+  --uf-blue: #0021a5;
 }
 
 /* Apply UF's blue color to a specific section */
@@ -24,15 +24,15 @@
 /* Add more styles as needed */
 
 .toplevel {
-  display: flex; 
-	justify-content: center; 
-	align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .instructions {
-  display: flex; 
-	justify-content: center; 
-	align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   /* margin-top: -5px; */
 }
 
@@ -43,15 +43,14 @@
 }
 
 .tree {
-    display: flex; 
-    justify-content: center; 
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .folder {
   margin-top: 20px;
 }
-
 
 /* Additional CSS for styling as needed */
 
@@ -70,7 +69,7 @@
   color: #888; /* Use gray color for disabled text */
 }
 
-.container {
+.radio-container {
   display: flex;
   justify-content: flex-end; /* Align container to the right */
 }
@@ -91,21 +90,6 @@
   flex: 1;
   padding: 10px; /* Add padding to separate content from navbar */
 }
-
-/* .navbar ul {
-  list-style-type: none; 
-  padding: 0;
-}
-
-.navbar li {
-  margin-bottom: 10px; 
-} */
-
-/* .navbar a {
-  text-decoration: none; /* Remove underline from links */
-  /* color: #333; Link color */
-  /* display: block; Make links block-level for full width */
-/* } */ 
 
 .navbar a:hover {
   background-color: #ddd; /* Background color on hover */

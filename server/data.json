@@ -168,5 +168,15 @@
         "selectedOption": "Interesting"
       }
     ]
+  },
+  {
+    "page": 4,
+    "optionSets": [
+      {
+        "options": "Bad",
+        "additionalOptions": "Mechanistic",
+        "selectedOption": "Doesn't Need Me"
+      }
+    ]
   }
 ]
