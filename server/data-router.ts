@@ -14,6 +14,21 @@ const supabase = createClient(
   process.env.SUPABASE_KEY ?? ""
 );
 
+async function getFileExistsAndObject(
+  url: string
+): Promise<[boolean, any | undefined]> {
+  const response = await fetch(url, {
+    method: "get",
+  });
+
+  if (response.ok) {
+    const data = await response.json();
+    return [true, data];
+  } else {
+    return [false, null];
+  }
+}
+
 DataRouter.post("/save", async (req, res) => {
   console.log("Saving data");
   const jsonData = req.body;
@@ -21,16 +36,35 @@ DataRouter.post("/save", async (req, res) => {
 
   const filename = `${name}_results.json`;
 
-  const { data, error } = await supabase.storage
-    .from(bucket)
-    .upload(filename, JSON.stringify(jsonData));
+  const { data } = supabase.storage.from(bucket).getPublicUrl(filename);
 
-  if (error) {
-    res.status(500).send("Error");
-    return;
+  const [exists, object] = await getFileExistsAndObject(data.publicUrl);
+
+  // If the file exists, update it. Otherwise, upload a new file.
+  if (exists && object) {
+    const { data, error } = await supabase.storage
+      .from(bucket)
+      .update(filename, JSON.stringify(jsonData));
+
+    if (error) {
+      res.status(500).send("Error");
+      return;
+    } else {
+      res.status(200).send("Success");
+      return;
+    }
   } else {
-    res.status(200).send("Success");
-    return;
+    const { data, error } = await supabase.storage
+      .from(bucket)
+      .upload(filename, JSON.stringify(jsonData));
+
+    if (error) {
+      res.status(500).send("Error");
+      return;
+    } else {
+      res.status(200).send("Success");
+      return;
+    }
   }
 });
 
@@ -64,13 +98,12 @@ DataRouter.get("/current-progress", async (req, res) => {
 
   const { data } = supabase.storage.from(bucket).getPublicUrl(filename);
 
-  const response = await fetch(data.publicUrl, {
-    method: "get",
-  });
+  const [exists, object] = await getFileExistsAndObject(data.publicUrl);
 
-  if (response.ok) {
-    const jsonData = await response.json();
-    res.status(200).send(jsonData);
+  console.log(exists, object);
+
+  if (exists && object) {
+    res.status(200).send(object);
     return;
   } else {
     res.status(200).send();

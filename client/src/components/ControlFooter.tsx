@@ -31,6 +31,10 @@ export default function ControlFooter(props: {
       : "https://annotation-experiment.netlify.app/api/";
 
   async function saveAnnotation() {
+    if (!validateCurrentAnnotation()) {
+      return;
+    }
+
     const response = await fetch(`${BASE_URL}save?name=${userName}`, {
       method: "POST",
       headers: {
@@ -43,6 +47,34 @@ export default function ControlFooter(props: {
     }
   }
 
+  function validateCurrentAnnotation() {
+    const currentEntry = annotationEntries[currentAnnotation].primaryOptionSets;
+    const secondaryEntry =
+      annotationEntries[currentAnnotation].secondaryOptionSets;
+
+    if (!currentEntry.primaryBelief) {
+      alert("Please select a primary belief");
+      return false;
+    } else if (!currentEntry.secondaryBelief) {
+      alert("Please select a secondary belief");
+      return false;
+    } else if (!currentEntry.tertiaryBelief) {
+      alert("Please select a tertiary belief");
+      return false;
+    } else if (secondaryEntry && !secondaryEntry.primaryBelief) {
+      alert("Please select a primary belief for the secondary belief");
+      return false;
+    } else if (secondaryEntry && !secondaryEntry.secondaryBelief) {
+      alert("Please select a secondary belief for the secondary belief");
+      return false;
+    } else if (secondaryEntry && !secondaryEntry.tertiaryBelief) {
+      alert("Please select a tertiary belief for the secondary belief");
+      return false;
+    }
+
+    return true;
+  }
+
   return (
     <footer className="footer">
       <button className="footer-button" onClick={toggleMixedBelief}>
@@ -51,7 +83,15 @@ export default function ControlFooter(props: {
       <button className="footer-button" onClick={saveAnnotation}>
         Save Annotations
       </button>
-      <button onClick={handlePrev}>Prev</button>
+      <button
+        onClick={() => {
+          if (validateCurrentAnnotation()) {
+            handlePrev();
+          }
+        }}
+      >
+        Prev
+      </button>
       <span className="page-info">
         Annotation {currentAnnotation + 1} of {totalAnnotation}
       </span>
@@ -61,7 +101,14 @@ export default function ControlFooter(props: {
         </button>
       )}
       {!showSubmit && (
-        <button onClick={handleNext} className="next-button">
+        <button
+          onClick={() => {
+            if (validateCurrentAnnotation()) {
+              handleNext();
+            }
+          }}
+          className="next-button"
+        >
           Next
         </button>
       )}
