@@ -62,6 +62,9 @@ function App() {
       .map((entry) => entry.page),
   ]);
 
+  const annotationIsComplete =
+    completedAnnotations.size === annotationData.pages.length;
+
   const selectedPrimaryOptionSet =
     annotationEntries[currentAnnotation].primaryOptionSets;
 
@@ -120,7 +123,9 @@ function App() {
 
   let instruction = "Please select a primary belief.";
 
-  if (
+  if (annotationIsComplete) {
+    instruction = "All annotations are complete!";
+  } else if (
     selectedPrimaryOptionSet.primaryBelief === "" ||
     (selectedSecondaryOptionSet &&
       selectedSecondaryOptionSet.primaryBelief === "")
@@ -266,39 +271,41 @@ function App() {
     <div className="app-container">
       <textarea className="text-box" rows={5} value={selectedText} readOnly />
       <h5 className="instructions">{instruction}</h5>
-      <div className="main-content">
-        <OptionSet
-          onPrimaryBelief={onPrimaryBelief}
-          onSecondaryBelief={onSecondaryBelief}
-          onTertiaryBelief={onTeriaryBelief}
-          currentAnnotationData={selectedPrimaryOptionSet}
-        />
-        {selectedSecondaryOptionSet && (
+      {!annotationIsComplete && (
+        <div className="main-content">
           <OptionSet
-            onPrimaryBelief={onPrimaryBeliefSecondary}
-            onSecondaryBelief={onSecondaryBeliefSecondary}
-            onTertiaryBelief={onTeriaryBeliefSecondary}
-            currentAnnotationData={selectedSecondaryOptionSet}
+            onPrimaryBelief={onPrimaryBelief}
+            onSecondaryBelief={onSecondaryBelief}
+            onTertiaryBelief={onTeriaryBelief}
+            currentAnnotationData={selectedPrimaryOptionSet}
           />
-        )}
-        <ControlFooter
-          userName={userName}
-          currentAnnotation={currentAnnotation}
-          totalAnnotation={annotationData.pages.length}
-          completedAnnotationCount={completedAnnotations.size}
-          hasMixedBelief={false}
-          annotationEntries={annotationEntries}
-          handleNext={() =>
-            setCurrentAnnotation(
-              Math.min(currentAnnotation + 1, annotationData.pages.length - 1)
-            )
-          }
-          handlePrev={() =>
-            setCurrentAnnotation(Math.max(currentAnnotation - 1, 0))
-          }
-          toggleMixedBelief={toggleMixedBelief}
-        />
-      </div>
+          {selectedSecondaryOptionSet && (
+            <OptionSet
+              onPrimaryBelief={onPrimaryBeliefSecondary}
+              onSecondaryBelief={onSecondaryBeliefSecondary}
+              onTertiaryBelief={onTeriaryBeliefSecondary}
+              currentAnnotationData={selectedSecondaryOptionSet}
+            />
+          )}
+          <ControlFooter
+            userName={userName}
+            currentAnnotation={currentAnnotation}
+            totalAnnotation={annotationData.pages.length}
+            completedAnnotationCount={completedAnnotations.size}
+            hasMixedBelief={false}
+            annotationEntries={annotationEntries}
+            handleNext={() =>
+              setCurrentAnnotation(
+                Math.min(currentAnnotation + 1, annotationData.pages.length - 1)
+              )
+            }
+            handlePrev={() =>
+              setCurrentAnnotation(Math.max(currentAnnotation - 1, 0))
+            }
+            toggleMixedBelief={toggleMixedBelief}
+          />
+        </div>
+      )}
       <Navbar
         currentAnnotation={currentAnnotation}
         setCurrentAnnotation={(page: number) => {
