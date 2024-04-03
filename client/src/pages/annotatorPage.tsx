@@ -89,12 +89,14 @@ function App() {
       );
 
       if (ignore) return;
-      const initProgressData = await initProgressResp.json();
 
+      if (initProgressResp.ok) {
+        const initProgressData = await initProgressResp.json();
+        setAnnotationEntries(initProgressData);
+      }
       if (initAnnotationData !== undefined) {
         setAnnotationData(initAnnotationData);
       }
-      setAnnotationEntries(initProgressData);
     }
 
     getInitializationData();

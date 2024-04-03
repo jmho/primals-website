@@ -88,6 +88,7 @@ DataRouter.get("/annotation-data", async (req, res) => {
 
   if (response.ok) {
     const jsonData = await response.json();
+    console.log(jsonData);
     res.status(200).send(jsonData);
     return;
   } else {
@@ -110,7 +111,7 @@ DataRouter.get("/current-progress", async (req, res) => {
     res.status(200).send(object);
     return;
   } else {
-    res.status(200).send();
+    res.status(404).send();
     return;
   }
 });
