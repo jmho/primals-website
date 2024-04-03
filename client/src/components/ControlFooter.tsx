@@ -28,7 +28,7 @@ export default function ControlFooter(props: {
   const BASE_URL =
     import.meta.env.MODE === "development"
       ? "http://localhost:3001/"
-      : "https://annotation-experiment.netlify.app/api/";
+      : "https://annotation-study-part-2.netlify.app/api/";
 
   async function saveAnnotation() {
     if (!validateCurrentAnnotation()) {
