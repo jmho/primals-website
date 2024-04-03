@@ -24,7 +24,8 @@ export default function Navbar(props: {
       <ul style={{ listStyleType: "none", padding: 0 }}>
         {[...Array(totalAnnotations)].map((_, index) => (
           <li
-            key={index}
+            onClick={() => setCurrentAnnotation(index)}
+            key={`Navbar items ${index}`}
             style={{
               margin: "10px 0",
               padding: "4px",
@@ -33,13 +34,9 @@ export default function Navbar(props: {
               color: currentAnnotation === index ? "#fff" : "#000",
             }}
           >
-            <a
-              href="#"
-              onClick={() => setCurrentAnnotation(index)}
-              style={{ textDecoration: "none" }}
-            >
+            <a style={{ textDecoration: "none" }}>
               {`Page ${index + 1}`}
-              {savedAnnotationSet.has(index + 1) && (
+              {savedAnnotationSet.has(index) && (
                 <span style={{ color: "green", marginLeft: "5px" }}>
                   &#10003;
                 </span>

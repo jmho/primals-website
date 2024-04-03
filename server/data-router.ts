@@ -44,7 +44,11 @@ DataRouter.post("/save", async (req, res) => {
   if (exists && object) {
     const { data, error } = await supabase.storage
       .from(bucket)
-      .update(filename, JSON.stringify(jsonData));
+      .update(filename, JSON.stringify(jsonData), {
+        cacheControl: "0",
+      });
+
+    console.log(data, error);
 
     if (error) {
       res.status(500).send("Error");
@@ -56,7 +60,9 @@ DataRouter.post("/save", async (req, res) => {
   } else {
     const { data, error } = await supabase.storage
       .from(bucket)
-      .upload(filename, JSON.stringify(jsonData));
+      .upload(filename, JSON.stringify(jsonData), {
+        cacheControl: "0",
+      });
 
     if (error) {
       res.status(500).send("Error");
@@ -99,8 +105,6 @@ DataRouter.get("/current-progress", async (req, res) => {
   const { data } = supabase.storage.from(bucket).getPublicUrl(filename);
 
   const [exists, object] = await getFileExistsAndObject(data.publicUrl);
-
-  console.log(exists, object);
 
   if (exists && object) {
     res.status(200).send(object);

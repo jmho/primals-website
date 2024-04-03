@@ -45,14 +45,20 @@ function App() {
       },
     ]
   );
-  const [instruction, setInstruction] = useState(
-    "Please select a primary belief."
-  );
 
   // If the annotation has no primary belief we can assume it has not been completed yet.
   const completedAnnotations: Set<number> = new Set([
     ...annotationEntries
-      .filter((item) => item.primaryOptionSets.primaryBelief)
+      .filter(
+        (item) =>
+          item.primaryOptionSets.primaryBelief !== "" &&
+          item.primaryOptionSets.secondaryBelief !== "" &&
+          item.primaryOptionSets.tertiaryBelief !== "" &&
+          (item.secondaryOptionSets === undefined ||
+            (item.secondaryOptionSets.primaryBelief !== "" &&
+              item.secondaryOptionSets.secondaryBelief !== "" &&
+              item.secondaryOptionSets.tertiaryBelief !== ""))
+      )
       .map((entry) => entry.page),
   ]);
 
@@ -69,29 +75,23 @@ function App() {
     let ignore = false;
 
     async function getInitializationData() {
-      await Promise.all([
-        fetch(`${BASE_URL}annotation-data?name=${userName}`)
-          .then(async (response) => {
-            if (ignore) return;
-            const data = await response.json();
-            if (data !== undefined) {
-              setAnnotationData(data);
-            }
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-          }),
+      const initAnnotationResp = await fetch(
+        `${BASE_URL}annotation-data?name=${userName}`
+      );
+      if (ignore) return;
+      const initAnnotationData = await initAnnotationResp.json();
 
-        fetch(`${BASE_URL}current-progress?name=${userName}`)
-          .then(async (response) => {
-            if (ignore) return;
-            const data = await response.json();
-            setAnnotationEntries(data);
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-          }),
-      ]);
+      const initProgressResp = await fetch(
+        `${BASE_URL}current-progress?name=${userName}`
+      );
+
+      if (ignore) return;
+      const initProgressData = await initProgressResp.json();
+
+      if (initAnnotationData !== undefined) {
+        setAnnotationData(initAnnotationData);
+      }
+      setAnnotationEntries(initProgressData);
     }
 
     getInitializationData();
@@ -118,20 +118,61 @@ function App() {
     }
   }, [annotationEntries, annotationData]);
 
-  // If the annotation entries has changed, update the instructions
-  useEffect(() => {
-    if (selectedPrimaryOptionSet.primaryBelief === "") {
-      setInstruction("Please select a primary belief.");
-    } else if (selectedPrimaryOptionSet.secondaryBelief === "") {
-      setInstruction("Please select a secondary belief.");
-    } else if (selectedPrimaryOptionSet.tertiaryBelief === "") {
-      setInstruction("Please select a tertiary belief.");
-    } else {
-      setInstruction(
-        'Annotation complete! Please click next or if you feel there is a mixed belief, click "Add Mixed Belief".'
-      );
+  let instruction = "Please select a primary belief.";
+
+  if (
+    selectedPrimaryOptionSet.primaryBelief === "" ||
+    (selectedSecondaryOptionSet &&
+      selectedSecondaryOptionSet.primaryBelief === "")
+  ) {
+    instruction = "Please select a primary belief.";
+  } else if (
+    selectedPrimaryOptionSet.secondaryBelief === "" ||
+    (selectedSecondaryOptionSet &&
+      selectedSecondaryOptionSet.secondaryBelief === "")
+  ) {
+    instruction = "Please select a secondary belief.";
+  } else if (
+    selectedPrimaryOptionSet.tertiaryBelief === "" ||
+    (selectedSecondaryOptionSet &&
+      selectedSecondaryOptionSet.tertiaryBelief === "")
+  ) {
+    instruction = "Please select a tertiary belief.";
+  } else {
+    instruction =
+      'Annotation complete! Please click next or if you feel there is a mixed belief, click "Add Mixed Belief".';
+  }
+
+  // If the sidebar is used, and the annotaiton is incomplete, reset the instruction
+  function resetIfIncomplete() {
+    const primaryIsComplete =
+      selectedPrimaryOptionSet.primaryBelief !== "" &&
+      selectedPrimaryOptionSet.secondaryBelief !== "" &&
+      selectedPrimaryOptionSet.tertiaryBelief !== "";
+
+    const secondaryIsComplete =
+      selectedSecondaryOptionSet === undefined
+        ? true
+        : selectedSecondaryOptionSet.primaryBelief !== "" &&
+          selectedSecondaryOptionSet.secondaryBelief !== "" &&
+          selectedSecondaryOptionSet.tertiaryBelief !== ""
+        ? true
+        : false;
+
+    if (!primaryIsComplete || !secondaryIsComplete) {
+      const currentAnnotationEntryCopy = [...annotationEntries];
+      const currentAnnotationEntry =
+        currentAnnotationEntryCopy[currentAnnotation];
+      currentAnnotationEntry.secondaryOptionSets = undefined;
+      currentAnnotationEntry.primaryOptionSets = {
+        primaryBelief: "",
+        secondaryBelief: "",
+        tertiaryBelief: "",
+      };
+
+      setAnnotationEntries(currentAnnotationEntryCopy);
     }
-  }, [annotationEntries, currentAnnotation, selectedPrimaryOptionSet]);
+  }
 
   // Sometimes, the annotation data can have two options. This allows the user to
   // add a mixed belief to the annotation.
@@ -221,8 +262,6 @@ function App() {
     setAnnotationEntries(currentAnnotationEntryCopy);
   };
 
-  console.log();
-
   return (
     <div className="app-container">
       <textarea className="text-box" rows={5} value={selectedText} readOnly />
@@ -262,7 +301,10 @@ function App() {
       </div>
       <Navbar
         currentAnnotation={currentAnnotation}
-        setCurrentAnnotation={setCurrentAnnotation}
+        setCurrentAnnotation={(page: number) => {
+          resetIfIncomplete();
+          setCurrentAnnotation(page);
+        }}
         savedAnnotationSet={completedAnnotations}
         totalAnnotations={annotationData.pages.length}
       />

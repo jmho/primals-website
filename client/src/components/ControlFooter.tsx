@@ -84,8 +84,9 @@ export default function ControlFooter(props: {
         Save Annotations
       </button>
       <button
-        onClick={() => {
+        onClick={async () => {
           if (validateCurrentAnnotation()) {
+            await saveAnnotation();
             handlePrev();
           }
         }}
@@ -102,8 +103,9 @@ export default function ControlFooter(props: {
       )}
       {!showSubmit && (
         <button
-          onClick={() => {
+          onClick={async () => {
             if (validateCurrentAnnotation()) {
+              await saveAnnotation();
               handleNext();
             }
           }}
