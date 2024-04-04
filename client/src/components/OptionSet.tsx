@@ -124,7 +124,7 @@ export function OptionSet(props: {
                         onChange={() => onSecondaryBelief("NoSecondaryBelief")}
                         disabled={false}
                       />
-                      <span>No Secondary Belief</span>
+                      <span>Tertiaries with no Secondary</span>
                     </label>
                   </div>
                 </ul>
