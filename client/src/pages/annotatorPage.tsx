@@ -11,7 +11,7 @@ import {
   TertiaryBelief,
   primaryBelief,
   secondaryBelief,
-} from "../types/data";
+} from "../util/types";
 import Navbar from "../components/navbar";
 import ControlFooter from "../components/ControlFooter";
 
@@ -147,7 +147,7 @@ function App() {
     instruction = "Please select a tertiary belief.";
   } else {
     instruction =
-      'Annotation complete! Please click next or if you feel there is a mixed belief, click "Add Mixed Belief".';
+      'Annotation complete! Please click next or if you feel this tweet has dual beliefs (Example: "XYZ is good, but IJK is bad..."), click "Add Bad/Good Belief".';
   }
 
   // If the sidebar is used, and the annotaiton is incomplete, reset the instruction
@@ -189,7 +189,8 @@ function App() {
       currentAnnotationEntryCopy[currentAnnotation];
     if (currentAnnotationEntry.secondaryOptionSets === undefined) {
       currentAnnotationEntry.secondaryOptionSets = {
-        primaryBelief: "",
+        primaryBelief:
+          selectedPrimaryOptionSet.primaryBelief === "Good" ? "Bad" : "Good",
         secondaryBelief: "",
         tertiaryBelief: "",
       };
@@ -207,6 +208,14 @@ function App() {
       secondaryBelief: "",
       tertiaryBelief: "",
     };
+    if (selectedSecondaryOptionSet !== undefined) {
+      currentAnnotationEntryCopy[currentAnnotation].secondaryOptionSets = {
+        primaryBelief:
+          selectedSecondaryOptionSet.primaryBelief === "Good" ? "Bad" : "Good",
+        secondaryBelief: "",
+        tertiaryBelief: "",
+      };
+    }
     setAnnotationEntries(currentAnnotationEntryCopy);
   };
 
@@ -235,15 +244,7 @@ function App() {
   // Belief handlers for Secondary Options
 
   // Update the primary belief when selected
-  const onPrimaryBeliefSecondary = (belief: Belief) => {
-    const currentAnnotationEntryCopy = [...annotationEntries];
-    currentAnnotationEntryCopy[currentAnnotation].secondaryOptionSets = {
-      primaryBelief: belief as primaryBelief,
-      secondaryBelief: "",
-      tertiaryBelief: "",
-    };
-    setAnnotationEntries(currentAnnotationEntryCopy);
-  };
+  const onPrimaryBeliefSecondary = () => {};
 
   // Update the secondary belief when selected
   const onSecondaryBeliefSecondary = (belief: Belief) => {
@@ -290,11 +291,12 @@ function App() {
             />
           )}
           <ControlFooter
+            selectedPrimaryBelief={selectedPrimaryOptionSet.primaryBelief}
             userName={userName}
             currentAnnotation={currentAnnotation}
             totalAnnotation={annotationData.pages.length}
             completedAnnotationCount={completedAnnotations.size}
-            hasMixedBelief={false}
+            hasMixedBelief={selectedSecondaryOptionSet !== undefined}
             annotationEntries={annotationEntries}
             handleNext={() =>
               setCurrentAnnotation(

@@ -1,6 +1,15 @@
-import { RadioButtonsGroup } from "./RadioButtonGroup";
-import Tree from "./Tree";
-import { Belief, OptionSet as OptionSetType } from "../types/data";
+import { Belief, OptionSet as OptionSetType } from "../util/types";
+import TwoColumnOptions from "./twoColumnOptions";
+import {
+  aliveTertiaries,
+  dangerousTertiaries,
+  dullTertiaries,
+  enticingTertiaries,
+  mechanisticTertiaries,
+  noSecondaryGoodTertiaries,
+  noSecondaryBadTertiaries,
+  safeTertiaries,
+} from "../util/data";
 
 export function OptionSet(props: {
   onPrimaryBelief: (belief: Belief) => void;
@@ -19,183 +28,122 @@ export function OptionSet(props: {
   const selectedSecondary = currentAnnotationData.secondaryBelief;
   const selectedTertiary = currentAnnotationData.tertiaryBelief;
 
-  const index = 1;
-
   return (
     <>
       <div className="toplevel">
-        <RadioButtonsGroup
-          index={index}
-          options={["Good", "Bad"]}
-          selectedOption={selectedPrimary}
-          onChange={onPrimaryBelief}
+        <TwoColumnOptions
+          visibility={true}
+          selectedBelief={selectedPrimary}
+          leftColumn={["Good"]}
+          rightColumn={["Bad"]}
+          leftColumnDisabled={false}
+          rightColumnDisabled={false}
+          onSelect={onPrimaryBelief}
         />
       </div>
+
       <div className="additional-options-container">
-        {selectedPrimary === "Good" && (
-          <>
-            <div id="flex-col">
-              <div>
-                <RadioButtonsGroup
-                  index={index}
-                  options={["Safe"]}
-                  selectedOption={selectedSecondary}
-                  onChange={onSecondaryBelief}
-                />
-                <label>
-                  <span className="disabled-text">
-                    <input type="radio" checked={false} disabled />
-                    Dangerous
-                  </span>
-                </label>
-              </div>
-              <Tree
-                folder="folder1"
-                selectedPrimary={selectedPrimary}
-                selectedSecondary={selectedSecondary}
-                selectedTertiary={selectedTertiary}
-                onSelect={onTertiaryBelief}
-              />
-            </div>
+        <div id="flex-col">
+          <TwoColumnOptions
+            visibility={selectedPrimary !== ""}
+            selectedBelief={selectedSecondary}
+            leftColumn={["Safe"]}
+            rightColumn={["Dangerous"]}
+            leftColumnDisabled={selectedPrimary !== "Good"}
+            rightColumnDisabled={selectedPrimary === "Good"}
+            onSelect={onSecondaryBelief}
+          />
+          <TwoColumnOptions
+            visibility={selectedPrimary !== ""}
+            selectedBelief={selectedTertiary}
+            leftColumn={safeTertiaries}
+            rightColumn={dangerousTertiaries}
+            leftColumnDisabled={selectedSecondary !== "Safe"}
+            rightColumnDisabled={selectedSecondary !== "Dangerous"}
+            onSelect={onTertiaryBelief}
+          />
+        </div>
 
-            <div id="flex-col">
-              <div>
-                <RadioButtonsGroup
-                  index={index}
-                  options={["Enticing"]}
-                  selectedOption={selectedSecondary}
-                  onChange={onSecondaryBelief}
-                />
-                <label>
-                  <span className="disabled-text">
-                    <input type="radio" checked={false} disabled />
-                    Dull
-                  </span>
-                </label>
-              </div>
-              <Tree
-                folder="folder2"
-                selectedPrimary={selectedPrimary}
-                selectedSecondary={selectedSecondary}
-                selectedTertiary={selectedTertiary}
-                onSelect={onTertiaryBelief}
-              />
-            </div>
+        <div id="flex-col">
+          <div>
+            <TwoColumnOptions
+              visibility={selectedPrimary !== ""}
+              selectedBelief={selectedSecondary}
+              leftColumn={["Enticing"]}
+              rightColumn={["Dull"]}
+              leftColumnDisabled={selectedPrimary !== "Good"}
+              rightColumnDisabled={selectedPrimary === "Good"}
+              onSelect={onSecondaryBelief}
+            />
+            <TwoColumnOptions
+              visibility={selectedPrimary !== ""}
+              selectedBelief={selectedTertiary}
+              leftColumn={enticingTertiaries}
+              rightColumn={dullTertiaries}
+              leftColumnDisabled={selectedSecondary !== "Enticing"}
+              rightColumnDisabled={selectedSecondary !== "Dull"}
+              onSelect={onTertiaryBelief}
+            />
+          </div>
+        </div>
 
-            <div id="flex-col">
-              <div>
-                <RadioButtonsGroup
-                  index={index}
-                  options={["Alive"]}
-                  selectedOption={selectedSecondary}
-                  onChange={onSecondaryBelief}
-                />
-                <label>
-                  <span className="disabled-text">
-                    <input type="radio" checked={false} disabled />
-                    Mechanistic
-                  </span>
-                </label>
-              </div>
-              <Tree
-                folder="folder3"
-                selectedPrimary={selectedPrimary}
-                selectedSecondary={selectedSecondary}
-                selectedTertiary={selectedTertiary}
-                onSelect={onTertiaryBelief}
-              />
-              <Tree
-                folder="folder4"
-                selectedPrimary={selectedPrimary}
-                selectedSecondary={selectedSecondary}
-                selectedTertiary={selectedTertiary}
-                onSelect={onTertiaryBelief}
-              />
-            </div>
-          </>
-        )}
-        {selectedPrimary === "Bad" && (
-          <>
-            <div id="flex-col">
-              <div>
-                <label>
-                  <span className="disabled-text">
-                    <input type="radio" checked={false} disabled />
-                    Safe
-                  </span>
-                </label>
-                <RadioButtonsGroup
-                  index={index}
-                  options={["Dangerous"]}
-                  selectedOption={selectedSecondary}
-                  onChange={onSecondaryBelief}
-                />
-              </div>
-              <Tree
-                folder="folder5"
-                selectedPrimary={selectedPrimary}
-                selectedSecondary={selectedSecondary}
-                selectedTertiary={selectedTertiary}
-                onSelect={onTertiaryBelief}
-              />
-            </div>
+        <div id="flex-col">
+          <div>
+            <TwoColumnOptions
+              visibility={selectedPrimary !== ""}
+              selectedBelief={selectedSecondary}
+              leftColumn={["Alive"]}
+              rightColumn={["Mechanistic"]}
+              leftColumnDisabled={selectedPrimary !== "Good"}
+              rightColumnDisabled={selectedPrimary === "Good"}
+              onSelect={onSecondaryBelief}
+            />
+            <TwoColumnOptions
+              visibility={selectedPrimary !== ""}
+              selectedBelief={selectedTertiary}
+              leftColumn={aliveTertiaries}
+              rightColumn={mechanisticTertiaries}
+              leftColumnDisabled={selectedSecondary !== "Alive"}
+              rightColumnDisabled={selectedSecondary !== "Mechanistic"}
+              onSelect={onTertiaryBelief}
+            />
+          </div>
+        </div>
 
-            <div id="flex-col">
-              <div>
-                <label>
-                  <span className="disabled-text">
-                    <input type="radio" checked={false} disabled />
-                    Enticing
-                  </span>
-                </label>
-                <RadioButtonsGroup
-                  index={index}
-                  options={["Dull"]}
-                  selectedOption={selectedSecondary}
-                  onChange={onSecondaryBelief}
-                />
+        <div id="flex-col">
+          <div className="tree-container">
+            {selectedPrimary !== "" && (
+              <div className="tree">
+                <ul>
+                  <div>
+                    <label>
+                      <input
+                        type="radio"
+                        value={"NoSecondaryBelief"}
+                        checked={selectedSecondary === "NoSecondaryBelief"}
+                        onChange={() => onSecondaryBelief("NoSecondaryBelief")}
+                        disabled={false}
+                      />
+                      <span>No Secondary Belief</span>
+                    </label>
+                  </div>
+                </ul>
               </div>
-              <Tree
-                folder="folder6"
-                selectedPrimary={selectedPrimary}
-                selectedSecondary={selectedSecondary}
-                selectedTertiary={selectedTertiary}
-                onSelect={onTertiaryBelief}
-              />
-            </div>
+            )}
+          </div>
 
-            <div id="flex-col">
-              <div>
-                <label>
-                  <span className="disabled-text">
-                    <input type="radio" checked={false} disabled />
-                    Alive
-                  </span>
-                </label>
-                <RadioButtonsGroup
-                  index={index}
-                  options={["Mechanistic"]}
-                  selectedOption={selectedSecondary}
-                  onChange={onSecondaryBelief}
-                />
-              </div>
-              <Tree
-                folder="folder7"
-                selectedPrimary={selectedPrimary}
-                selectedSecondary={selectedSecondary}
-                selectedTertiary={selectedTertiary}
-                onSelect={onTertiaryBelief}
-              />
-              <Tree
-                folder="folder8"
-                selectedPrimary={selectedPrimary}
-                selectedSecondary={selectedSecondary}
-                selectedTertiary={selectedTertiary}
-                onSelect={onTertiaryBelief}
-              />
-            </div>
-          </>
-        )}
+          {selectedSecondary === "NoSecondaryBelief" && (
+            <TwoColumnOptions
+              visibility={selectedPrimary !== ""}
+              selectedBelief={selectedTertiary}
+              leftColumn={noSecondaryGoodTertiaries}
+              rightColumn={noSecondaryBadTertiaries}
+              leftColumnDisabled={selectedPrimary !== "Good"}
+              rightColumnDisabled={selectedPrimary === "Good"}
+              onSelect={onTertiaryBelief}
+            />
+          )}
+        </div>
       </div>
     </>
   );

@@ -6,6 +6,7 @@ export type secondaryBelief =
   | "Dull"
   | "Alive"
   | "Mechanistic"
+  | "NoSecondaryBelief"
   | "";
 
 export type TertiaryBelief =
@@ -56,16 +57,6 @@ export type TertiaryBelief =
   | "";
 
 export type Belief = primaryBelief | secondaryBelief | TertiaryBelief;
-
-export type Folders =
-  | "folder1"
-  | "folder2"
-  | "folder3"
-  | "folder4"
-  | "folder5"
-  | "folder6"
-  | "folder7"
-  | "folder8";
 
 export interface PageData {
   content: string;

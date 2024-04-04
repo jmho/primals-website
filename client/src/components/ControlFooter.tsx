@@ -1,7 +1,8 @@
-import { AnnotationEntries } from "../types/data";
+import { AnnotationEntries } from "../util/types";
 
 export default function ControlFooter(props: {
   userName: string;
+  selectedPrimaryBelief: "Good" | "Bad" | "";
   currentAnnotation: number;
   totalAnnotation: number;
   completedAnnotationCount: number;
@@ -13,6 +14,7 @@ export default function ControlFooter(props: {
 }) {
   const {
     userName,
+    selectedPrimaryBelief,
     currentAnnotation,
     totalAnnotation,
     completedAnnotationCount,
@@ -77,9 +79,16 @@ export default function ControlFooter(props: {
 
   return (
     <footer className="footer">
-      <button className="footer-button" onClick={toggleMixedBelief}>
-        {!hasMixedBelief ? "Add Mixed Belief" : "Remove Mixed Belief"}
-      </button>
+      {selectedPrimaryBelief !== "" && (
+        <button className="footer-button" onClick={toggleMixedBelief}>
+          {!hasMixedBelief
+            ? `Add ${selectedPrimaryBelief === "Good" ? "Bad" : "Good"} Belief`
+            : `Remove ${
+                selectedPrimaryBelief === "Good" ? "Bad" : "Good"
+              } Belief`}
+        </button>
+      )}
+
       <button className="footer-button" onClick={saveAnnotation}>
         Save Annotations
       </button>
