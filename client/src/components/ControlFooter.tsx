@@ -8,6 +8,7 @@ export default function ControlFooter(props: {
   completedAnnotationCount: number;
   hasMixedBelief: boolean;
   annotationEntries: AnnotationEntries;
+  onAnnotationComplete: () => void;
   handleNext: () => void;
   handlePrev: () => void;
   toggleMixedBelief: () => void;
@@ -106,7 +107,13 @@ export default function ControlFooter(props: {
         Annotation {currentAnnotation + 1} of {totalAnnotation}
       </span>
       {showSubmit && (
-        <button onClick={saveAnnotation} className="submit-button">
+        <button
+          onClick={async () => {
+            await saveAnnotation();
+            props.onAnnotationComplete();
+          }}
+          className="submit-button"
+        >
           Submit
         </button>
       )}

@@ -45,6 +45,7 @@ function App() {
       },
     ]
   );
+  const [annotationIsComplete, setAnnotationIsComplete] = useState(false);
 
   // If the annotation has no primary belief we can assume it has not been completed yet.
   const completedAnnotations: Set<number> = new Set([
@@ -61,9 +62,6 @@ function App() {
       )
       .map((entry) => entry.page),
   ]);
-
-  const annotationIsComplete =
-    completedAnnotations.size === annotationData.pages.length;
 
   const selectedPrimaryOptionSet =
     annotationEntries[currentAnnotation].primaryOptionSets;
@@ -88,14 +86,26 @@ function App() {
         `${BASE_URL}current-progress?name=${userName}`
       );
 
+      const initProgressData: AnnotationEntries | undefined =
+        await initProgressResp.json();
+
       if (ignore) return;
 
-      if (initProgressResp.ok) {
-        const initProgressData = await initProgressResp.json();
-        setAnnotationEntries(initProgressData);
-      }
-      if (initAnnotationData !== undefined) {
+      if (initAnnotationData !== undefined && initProgressData !== undefined) {
         setAnnotationData(initAnnotationData);
+        setAnnotationEntries(initProgressData);
+        setAnnotationIsComplete(
+          initProgressData.every(
+            (entry) =>
+              entry.primaryOptionSets.primaryBelief !== "" &&
+              entry.primaryOptionSets.secondaryBelief !== "" &&
+              entry.primaryOptionSets.tertiaryBelief !== "" &&
+              (entry.secondaryOptionSets === undefined ||
+                (entry.secondaryOptionSets.primaryBelief !== "" &&
+                  entry.secondaryOptionSets.secondaryBelief !== "" &&
+                  entry.secondaryOptionSets.tertiaryBelief !== ""))
+          )
+        );
       }
     }
 
@@ -298,6 +308,7 @@ function App() {
             completedAnnotationCount={completedAnnotations.size}
             hasMixedBelief={selectedSecondaryOptionSet !== undefined}
             annotationEntries={annotationEntries}
+            onAnnotationComplete={() => setAnnotationIsComplete(true)}
             handleNext={() =>
               setCurrentAnnotation(
                 Math.min(currentAnnotation + 1, annotationData.pages.length - 1)
