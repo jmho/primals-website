@@ -136,8 +136,14 @@ export function OptionSet(props: {
             selectedBelief={selectedTertiary}
             leftColumn={noSecondaryGoodTertiaries}
             rightColumn={noSecondaryBadTertiaries}
-            leftColumnDisabled={selectedPrimary !== "Good"}
-            rightColumnDisabled={selectedPrimary === "Good"}
+            leftColumnDisabled={
+              selectedPrimary !== "Good" &&
+              selectedSecondary !== "NoSecondaryBelief"
+            }
+            rightColumnDisabled={
+              selectedPrimary === "Good" &&
+              selectedSecondary !== "NoSecondaryBelief"
+            }
             onSelect={onTertiaryBelief}
           />
         </div>
