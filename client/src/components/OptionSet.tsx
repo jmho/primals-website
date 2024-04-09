@@ -131,18 +131,15 @@ export function OptionSet(props: {
               </div>
             )}
           </div>
-
-          {selectedSecondary === "NoSecondaryBelief" && (
-            <TwoColumnOptions
-              visibility={selectedPrimary !== ""}
-              selectedBelief={selectedTertiary}
-              leftColumn={noSecondaryGoodTertiaries}
-              rightColumn={noSecondaryBadTertiaries}
-              leftColumnDisabled={selectedPrimary !== "Good"}
-              rightColumnDisabled={selectedPrimary === "Good"}
-              onSelect={onTertiaryBelief}
-            />
-          )}
+          <TwoColumnOptions
+            visibility={selectedPrimary !== ""}
+            selectedBelief={selectedTertiary}
+            leftColumn={noSecondaryGoodTertiaries}
+            rightColumn={noSecondaryBadTertiaries}
+            leftColumnDisabled={selectedPrimary !== "Good"}
+            rightColumnDisabled={selectedPrimary === "Good"}
+            onSelect={onTertiaryBelief}
+          />
         </div>
       </div>
     </>
