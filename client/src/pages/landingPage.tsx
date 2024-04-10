@@ -27,6 +27,10 @@ export default function LandingPage() {
       name: "Justin",
       value: "justin",
     },
+    {
+      name: "Test",
+      value: "test"
+    },
   ];
 
   return (
