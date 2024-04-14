@@ -86,13 +86,9 @@ function App() {
         `${BASE_URL}current-progress?name=${userName}`
       );
 
-      const initProgressData: AnnotationEntries | undefined =
-        await initProgressResp.json();
-
-      if (ignore) return;
-
-      if (initAnnotationData !== undefined && initProgressData !== undefined) {
-        setAnnotationData(initAnnotationData);
+      if (initProgressResp.ok === true) {
+        const initProgressData: AnnotationEntries =
+          await initProgressResp.json();
         setAnnotationEntries(initProgressData);
         setAnnotationIsComplete(
           initProgressData.every(
@@ -106,6 +102,10 @@ function App() {
                   entry.secondaryOptionSets.tertiaryBelief !== ""))
           )
         );
+      }
+
+      if (initAnnotationData !== undefined) {
+        setAnnotationData(initAnnotationData);
       }
     }
 
