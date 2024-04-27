@@ -24,8 +24,28 @@ export default function LandingPage() {
       value: "brodie",
     },
     {
+      name: "Chathuri",
+      value: "chathuri",
+    },
+    {
+      name: "Divyansh",
+      value: "divyansh",
+    },
+    {
+      name: "Sangpil",
+      value: "sangpil",
+    },
+    {
       name: "Justin",
       value: "justin",
+    },
+    {
+      name: "Venkat",
+      value: "venkat",
+    },
+    {
+      name: "Sudesh",
+      value: "sudesh",
     },
     {
       name: "Test",
