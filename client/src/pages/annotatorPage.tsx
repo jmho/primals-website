@@ -90,18 +90,18 @@ function App() {
         const initProgressData: AnnotationEntries =
           await initProgressResp.json();
         setAnnotationEntries(initProgressData);
-        setAnnotationIsComplete(
-          initProgressData.every(
-            (entry) =>
-              entry.primaryOptionSets.primaryBelief !== "" &&
-              entry.primaryOptionSets.secondaryBelief !== "" &&
-              entry.primaryOptionSets.tertiaryBelief !== "" &&
-              (entry.secondaryOptionSets === undefined ||
-                (entry.secondaryOptionSets.primaryBelief !== "" &&
-                  entry.secondaryOptionSets.secondaryBelief !== "" &&
-                  entry.secondaryOptionSets.tertiaryBelief !== ""))
-          )
-        );
+        // setAnnotationIsComplete(
+        //   initProgressData.every(
+        //     (entry) =>
+        //       entry.primaryOptionSets.primaryBelief !== "" &&
+        //       entry.primaryOptionSets.secondaryBelief !== "" &&
+        //       entry.primaryOptionSets.tertiaryBelief !== "" &&
+        //       (entry.secondaryOptionSets === undefined ||
+        //         (entry.secondaryOptionSets.primaryBelief !== "" &&
+        //           entry.secondaryOptionSets.secondaryBelief !== "" &&
+        //           entry.secondaryOptionSets.tertiaryBelief !== ""))
+        //   )
+        // );
       }
 
       if (initAnnotationData !== undefined) {
