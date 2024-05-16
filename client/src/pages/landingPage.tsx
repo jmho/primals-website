@@ -16,6 +16,10 @@ export default function LandingPage() {
 
   const nameOptions = [
     {
+      name: "AdjDivyansh",
+      value: "adjdivyansh",
+    },
+    {
       name: "Bonnie",
       value: "bonnie",
     },
