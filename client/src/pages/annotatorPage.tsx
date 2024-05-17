@@ -161,35 +161,35 @@ function App() {
   }
 
   // If the sidebar is used, and the annotaiton is incomplete, reset the instruction
-  function resetIfIncomplete() {
-    const primaryIsComplete =
-      selectedPrimaryOptionSet.primaryBelief !== "" &&
-      selectedPrimaryOptionSet.secondaryBelief !== "" &&
-      selectedPrimaryOptionSet.tertiaryBelief !== "";
+  // function resetIfIncomplete() {
+  //   const primaryIsComplete =
+  //     selectedPrimaryOptionSet.primaryBelief !== "" &&
+  //     selectedPrimaryOptionSet.secondaryBelief !== "" &&
+  //     selectedPrimaryOptionSet.tertiaryBelief !== "";
 
-    const secondaryIsComplete =
-      selectedSecondaryOptionSet === undefined
-        ? true
-        : selectedSecondaryOptionSet.primaryBelief !== "" &&
-          selectedSecondaryOptionSet.secondaryBelief !== "" &&
-          selectedSecondaryOptionSet.tertiaryBelief !== ""
-        ? true
-        : false;
+  //   const secondaryIsComplete =
+  //     selectedSecondaryOptionSet === undefined
+  //       ? true
+  //       : selectedSecondaryOptionSet.primaryBelief !== "" &&
+  //         selectedSecondaryOptionSet.secondaryBelief !== "" &&
+  //         selectedSecondaryOptionSet.tertiaryBelief !== ""
+  //       ? true
+  //       : false;
 
-    if (!primaryIsComplete || !secondaryIsComplete) {
-      const currentAnnotationEntryCopy = [...annotationEntries];
-      const currentAnnotationEntry =
-        currentAnnotationEntryCopy[currentAnnotation];
-      currentAnnotationEntry.secondaryOptionSets = undefined;
-      currentAnnotationEntry.primaryOptionSets = {
-        primaryBelief: "",
-        secondaryBelief: "",
-        tertiaryBelief: "",
-      };
+  //   if (!primaryIsComplete || !secondaryIsComplete) {
+  //     const currentAnnotationEntryCopy = [...annotationEntries];
+  //     const currentAnnotationEntry =
+  //       currentAnnotationEntryCopy[currentAnnotation];
+  //     currentAnnotationEntry.secondaryOptionSets = undefined;
+  //     currentAnnotationEntry.primaryOptionSets = {
+  //       primaryBelief: "",
+  //       secondaryBelief: "",
+  //       tertiaryBelief: "",
+  //     };
 
-      setAnnotationEntries(currentAnnotationEntryCopy);
-    }
-  }
+  //     setAnnotationEntries(currentAnnotationEntryCopy);
+  //   }
+  // }
 
   // Sometimes, the annotation data can have two options. This allows the user to
   // add a mixed belief to the annotation.
@@ -324,7 +324,7 @@ function App() {
       <Navbar
         currentAnnotation={currentAnnotation}
         setCurrentAnnotation={(page: number) => {
-          resetIfIncomplete();
+          // resetIfIncomplete();
           setCurrentAnnotation(page);
         }}
         savedAnnotationSet={completedAnnotations}
